@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { parseAnnotatedComment } from "../chess/comment";
+import { playSan, initialPosition } from "../chess/position";
 import {
   type OpeningMeta,
   lineSchema,
@@ -126,5 +128,19 @@ describe("schéma du JSON généré", () => {
 
   it("rejette une ouverture sans ligne", () => {
     expect(errorPaths(openingSchema.safeParse({ ...validMeta, lines: [] }))).toEqual(["lines"]);
+  });
+});
+
+describe("compatibilité avec les helpers d'échecs", () => {
+  it("accepte un coup construit à partir de playSan et parseAnnotatedComment", () => {
+    const played = playSan(initialPosition(), "e4");
+    const comment = parseAnnotatedComment("Prend le centre. [%cal Ge2e4,Bd1h5] [%csl Gd5,Yf7]");
+    const move = {
+      ...played?.move,
+      comment: comment.text,
+      arrows: comment.arrows,
+      highlights: comment.highlights,
+    };
+    expect(moveSchema.parse(move)).toEqual(move);
   });
 });

@@ -1,5 +1,7 @@
 # Opening Trainer
 
+[![CI](https://github.com/KyNaOo/TrainingChess/actions/workflows/ci.yml/badge.svg)](https://github.com/KyNaOo/TrainingChess/actions/workflows/ci.yml)
+
 Site web gratuit et open source pour **apprendre une ouverture d'échecs en une session**. Pas de compte, pas de connexion : on choisit une ouverture, on comprend ses idées, on apprend ses lignes coup par coup, puis on s'entraîne jusqu'à les maîtriser.
 
 > 🚧 Projet en cours de construction : voir les [issues](https://github.com/KyNaOo/TrainingChess/issues) et les milestones pour la feuille de route.

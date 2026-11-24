@@ -66,6 +66,13 @@ const eslintConfig = defineConfig([
       "no-restricted-imports": ["error", featuresRestrictedImports],
     },
   },
+  {
+    // Aucun texte d'interface en dur dans le JSX : tout passe par src/lib/strings.ts.
+    files: ["src/app/**/*.tsx", "src/features/**/*.tsx"],
+    rules: {
+      "react/jsx-no-literals": ["error", { noStrings: false, ignoreProps: true }],
+    },
+  },
   globalIgnores([
     ".next/**",
     "out/**",

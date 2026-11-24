@@ -49,3 +49,24 @@ describe("règle de dépendance de src/features", () => {
     expect(ruleIds).toContain("no-restricted-imports");
   });
 });
+
+describe("textes d'interface centralisés", () => {
+  it.each(["src/app/example.tsx", "src/features/example.tsx"])(
+    "rejette un texte en dur dans le JSX de %s",
+    async (filePath) => {
+      const ruleIds = await ruleIdsFor(
+        "export const Title = () => <h1>Bon coup</h1>;\n",
+        filePath,
+      );
+      expect(ruleIds).toContain("react/jsx-no-literals");
+    },
+  );
+
+  it("autorise les chaînes lues depuis src/lib/strings", async () => {
+    const ruleIds = await ruleIdsFor(
+      'import { strings } from "@/lib/strings";\nexport const Title = () => <h1 className="text-xl">{strings.feedback.correct}</h1>;\n',
+      "src/features/example.tsx",
+    );
+    expect(ruleIds).not.toContain("react/jsx-no-literals");
+  });
+});

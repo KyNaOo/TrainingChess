@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { strings } from "@/lib/strings";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Opening Trainer",
-  description: "Apprendre une ouverture d'échecs en une session, gratuitement et sans compte.",
+  title: strings.site.name,
+  description: strings.site.description,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

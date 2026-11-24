@@ -35,6 +35,11 @@ Next.js (App Router, export statique) · TypeScript strict · Tailwind CSS · ch
 
 Le site est **100 % statique** : aucun backend, aucune base de données, aucun appel d'API au runtime.
 
+## Conventions
+
+- Code en anglais, interface en français.
+- Tous les textes affichés vivent dans [`src/lib/strings.ts`](src/lib/strings.ts) : aucun texte en dur dans le JSX (vérifié par la règle ESLint `react/jsx-no-literals` sur `src/app` et `src/features`). Les attributs comme `aria-label` ou `alt` viennent aussi de ce fichier.
+
 ## Licence
 
 [GPL-3.0](LICENSE), imposée par [chessground](https://github.com/lichess-org/chessground) et [chessops](https://github.com/niklasf/chessops).

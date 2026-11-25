@@ -41,6 +41,33 @@ export const strings = {
     incorrect: "Pas tout à fait",
   },
 
+  board: {
+    ariaLabel: "Échiquier",
+    promotion: {
+      title: "Promotion : choisir une pièce",
+      cancel: "Annuler la promotion",
+      roles: {
+        queen: "Dame",
+        rook: "Tour",
+        bishop: "Fou",
+        knight: "Cavalier",
+      },
+    },
+  },
+
+  /** Page de démo temporaire de l'échiquier (`/demo/board`), retirée avec la session complète. */
+  boardDemo: {
+    title: "Démo de l'échiquier",
+    description: "Page temporaire pour tester l'échiquier à la main : coups, promotion, flèches et miniature.",
+    reset: "Position initiale",
+    promotionPosition: "Position de promotion",
+    flip: "Retourner l'échiquier",
+    moves: "Coups joués",
+    noMove: "aucun",
+    miniature: "Miniature (lecture seule)",
+    miniatureAriaLabel: "Échiquier miniature : Partie italienne",
+  },
+
   review: {
     pendingBadge: "Contenu en cours de relecture",
   },

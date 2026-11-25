@@ -27,6 +27,8 @@ pnpm dev              # http://localhost:3000
 | `pnpm test` | Tests unitaires (Vitest) |
 | `pnpm test:e2e` | Tests end-to-end (Playwright) sur l'export statique |
 
+Une page de démo temporaire de l'échiquier est disponible sur `/demo/board` (coups, promotion, flèches, miniature).
+
 Avant le premier `pnpm test:e2e`, installer le navigateur : `pnpm exec playwright install chromium`.
 
 ## Contenu

@@ -1,0 +1,34 @@
+/*
+ * Coordonnées à l'intérieur de l'échiquier, quelle que soit sa taille
+ * (le style par défaut de chessground suppose une taille fixe et déborde).
+ */
+.cg-wrap coords {
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 1;
+  color: rgb(0 0 0 / 0.55);
+}
+
+.cg-wrap coords.ranks {
+  top: 0;
+  left: 2px;
+  width: auto;
+}
+
+.cg-wrap coords.ranks coord {
+  flex: 1 1 0;
+  transform: none;
+  padding-top: 1px;
+}
+
+.cg-wrap coords.files {
+  bottom: 0;
+  left: 0;
+  height: auto;
+}
+
+.cg-wrap coords.files coord {
+  flex: 1 1 0;
+  text-align: right;
+  padding-right: 3px;
+}

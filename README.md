@@ -41,6 +41,8 @@ Chaque ouverture vit dans `content/openings/<id>/` : `meta.json` (métadonnées 
 
 Chaque feuille de l'arbre PGN devient une ligne, nommée par un commentaire `{ # Nom — explication }`.
 
+Pour l'instant, `content/openings/test-opening/` est une ouverture minimale qui fait tourner la chaîne de contenu ; elle sera remplacée par la Partie italienne. Les exemples valides et invalides utilisés par les tests sont dans `scripts/__fixtures__/`.
+
 ## Stack
 
 Next.js (App Router, export statique) · TypeScript strict · Tailwind CSS · chessops · chessground · Zustand · Zod · Vitest · Playwright.

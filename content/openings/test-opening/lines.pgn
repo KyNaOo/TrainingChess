@@ -1,0 +1,30 @@
+[Event "Ouverture de test (Partie italienne)"]
+[Site "https://github.com/KyNaOo/TrainingChess"]
+[Result "*"]
+
+1. e4 { # Giuoco Piano — Le pion prend le centre et libère la dame et le fou f1. [%csl Ge4] }
+1... e5
+2. Nf3 { Le cavalier se développe en attaquant le pion e5. [%cal Gf3e5] }
+2... Nc6
+3. Bc4 { Le fou vise f7, la case que seul le roi noir protège. [%cal Gc4f7] [%csl Rf7] }
+3... Bc5
+( 3... Nf6 { # Deux cavaliers, 4.d3 Be7 — Les Noirs contre-attaquent tout de suite le pion e4. [%cal Rf6e4] } 4. d3 { Les Blancs protègent e4 calmement et gardent un jeu de développement. [%csl Ge4] }
+  4... Be7
+  ( 4... Bc5 { # Deux cavaliers, 4.d3 Bc5 — Le fou noir prend la même diagonale active que son homologue blanc. } 5. c3 { Prépare d4 pour gagner de l'espace et contester le fou c5. [%cal Gc3d4] } 5... d6 6. O-O { Le roi se met à l'abri avant que le centre ne s'ouvre. } 6... O-O 7. Re1 { La tour soutient e4 et se place sur la future colonne ouverte. [%cal Ge1e4] } )
+  5. O-O { Le roi se met à l'abri, la tour f1 pourra rejoindre le centre. }
+  5... O-O
+  6. Re1 { La tour protège e4 et libère f1 pour une manœuvre du cavalier vers g3. }
+  6... d6
+  7. c3 { Prépare d4 et ménage au fou un repli par b3 puis c2. [%cal Gd2d4] } )
+4. c3 { Prépare d4 pour chasser le fou c5 et occuper le centre. [%cal Gd2d4] }
+4... Nf6
+5. d4 { Les Blancs ouvrent le centre tant que le roi noir n'a pas roqué. [%csl Gd4,Ge4] }
+5... exd4
+6. cxd4 { Les Blancs obtiennent le centre idéal e4-d4. }
+6... Bb4+
+7. Bd2 { L'interposition propose l'échange des fous sans gêner le développement. }
+7... Bxd2+
+8. Nbxd2 { Le cavalier reprend en surveillant e4, que le cavalier f6 attaque. [%cal Gd2e4] }
+8... d5 { Les Noirs frappent le centre avant d'être écrasés. }
+9. exd5 { Les Blancs acceptent un pion d4 isolé en échange d'un jeu de pièces actif. [%csl Yd4] }
+*

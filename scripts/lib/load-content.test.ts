@@ -80,6 +80,7 @@ describe("contenu réel", () => {
   it("tout le contenu de content/openings est valide", async () => {
     const { openings, errors } = await loadContent(REAL_CONTENT_DIR);
     expect(errors).toEqual([]);
+    expect(openings.length).toBeGreaterThan(0);
     for (const opening of openings) expect(opening.lines.length).toBeGreaterThan(0);
   });
 });

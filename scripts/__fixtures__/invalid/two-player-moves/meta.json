@@ -1,0 +1,21 @@
+{
+  "id": "two-player-moves",
+  "name": "Fixture two-player-moves",
+  "eco": [
+    "B12"
+  ],
+  "side": "black",
+  "level": "intermediate",
+  "popularity": 1,
+  "keyPosition": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+  "summary": "Fixture de test.",
+  "keyIdeas": [
+    "Idée de test."
+  ],
+  "pawnStructures": "Structure de test.",
+  "typicalPlans": {
+    "white": "Plan blanc.",
+    "black": "Plan noir."
+  },
+  "reviewed": false
+}

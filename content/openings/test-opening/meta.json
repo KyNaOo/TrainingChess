@@ -1,0 +1,21 @@
+{
+  "id": "test-opening",
+  "name": "Ouverture de test (Partie italienne)",
+  "eco": ["C50", "C54", "C55"],
+  "side": "white",
+  "level": "beginner",
+  "popularity": 1,
+  "keyPosition": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+  "summary": "Ouverture minimale qui sert à faire tourner la chaîne de contenu avant l'arrivée de la vraie Partie italienne. Les Blancs développent vite leurs pièces et pointent le fou vers f7.",
+  "keyIdeas": [
+    "Développer les pièces mineures avant de lancer une action au centre.",
+    "Le fou c4 vise f7, la case la plus faible du camp noir au début de la partie.",
+    "Préparer d4 avec c3 pour bâtir un centre de pions solide."
+  ],
+  "pawnStructures": "Les Blancs visent le duo de pions e4-d4. Si les Noirs l'échangent, les Blancs gardent souvent un pion isolé en d4 ou en d5 qui donne de l'espace et des cases actives aux pièces.",
+  "typicalPlans": {
+    "white": "Roquer rapidement, préparer d4 avec c3, puis utiliser l'avance de développement contre le roi noir.",
+    "black": "Contester le centre par ...d5 au bon moment et échanger des pièces pour neutraliser l'initiative blanche."
+  },
+  "reviewed": false
+}

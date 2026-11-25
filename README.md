@@ -29,6 +29,18 @@ pnpm dev              # http://localhost:3000
 
 Avant le premier `pnpm test:e2e`, installer le navigateur : `pnpm exec playwright install chromium`.
 
+## Contenu
+
+Chaque ouverture vit dans `content/openings/<id>/` : `meta.json` (métadonnées et présentation) et `lines.pgn` (lignes annotées au format des études Lichess). `pnpm content:build` rejoue chaque coup avec chessops et échoue avec un message précis (ouverture, ligne, numéro de coup) si :
+
+- `meta.json` est invalide ou son `id` diffère du nom du dossier ;
+- un coup est illégal ;
+- un nœud où c'est au joueur de jouer propose plusieurs coups ;
+- `keyPosition` n'est pas atteinte dans la ligne principale ;
+- l'ouverture n'a pas 3 à 8 lignes, ou une ligne n'a pas 6 à 14 coups du joueur.
+
+Chaque feuille de l'arbre PGN devient une ligne, nommée par un commentaire `{ # Nom — explication }`.
+
 ## Stack
 
 Next.js (App Router, export statique) · TypeScript strict · Tailwind CSS · chessops · chessground · Zustand · Zod · Vitest · Playwright.

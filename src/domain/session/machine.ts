@@ -1,3 +1,4 @@
+import { INITIAL_FEN } from "chessops/fen";
 import type { Line, Move, Opening } from "../content/schema";
 import { dequeue, requeue } from "./queue";
 
@@ -247,6 +248,11 @@ export function lastMove(context: SessionContext, state: SessionState): Move | u
   return ply === 0 ? undefined : currentLine(context, state)?.moves[ply - 1];
 }
 
+/** Position affichée : FEN après le dernier coup joué, ou position initiale. */
+export function currentFen(context: SessionContext, state: SessionState): string {
+  return lastMove(context, state)?.fen ?? INITIAL_FEN;
+}
+
 /** Prochain coup de la ligne affichée, ou `undefined` si la ligne est finie. */
 export function nextMove(context: SessionContext, state: SessionState): Move | undefined {
   return currentLine(context, state)?.moves[currentPly(state)];
@@ -257,6 +263,16 @@ export function isOpponentTurn(context: SessionContext, state: SessionState): bo
   if (state.phase !== "learn" && state.phase !== "train") return false;
   const move = nextMove(context, state);
   return move !== undefined && move.side !== context.side;
+}
+
+/**
+ * Vrai quand l'interface doit jouer d'elle-même le coup adverse après un court
+ * délai. Dans Apprendre, seulement au bout de ce qui a déjà été vu : après un
+ * retour en arrière (←), c'est l'utilisateur qui réavance (→).
+ */
+export function shouldAutoplayOpponent(context: SessionContext, state: SessionState): boolean {
+  if (!isOpponentTurn(context, state)) return false;
+  return state.phase !== "learn" || state.ply >= state.maxPly;
 }
 
 /** Vrai quand l'échiquier attend un coup de l'utilisateur. */

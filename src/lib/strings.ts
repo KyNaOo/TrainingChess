@@ -58,6 +58,23 @@ export const strings = {
     backToOpenings: "Retour aux ouvertures",
   },
 
+  /** Étape « Apprendre ». */
+  learn: {
+    line: "Ligne",
+    startPosition: "Position de départ",
+    yourMove: "À vous de jouer : trouvez le coup suivant.",
+    opponentMove: "L'adversaire joue…",
+    hint: "Pas tout à fait : la flèche montre le bon coup.",
+    lineComplete: "Ligne terminée.",
+    nextLine: "Ligne suivante",
+    startTraining: "Passer à l'entraînement",
+    previous: "Coup précédent",
+    next: "Coup suivant",
+    previousIcon: "←",
+    nextIcon: "→",
+    keyboardHint: "Les touches ← et → permettent de revoir les coups.",
+  },
+
   /** Retours sur un coup, annoncés via `aria-live`. */
   feedback: {
     correct: "Bon coup",

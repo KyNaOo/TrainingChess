@@ -35,6 +35,19 @@ export const strings = {
     summary: "Bilan",
   },
 
+  /** Page d'une ouverture (`/openings/[id]`). */
+  session: {
+    playing: "Vous jouez les",
+    currentStep: "Étape en cours",
+    backToOpenings: "Toutes les ouvertures",
+  },
+
+  notFound: {
+    title: "Page introuvable",
+    description: "Cette ouverture n'existe pas, ou l'adresse est incorrecte.",
+    backToOpenings: "Retour aux ouvertures",
+  },
+
   /** Retours sur un coup, annoncés via `aria-live`. */
   feedback: {
     correct: "Bon coup",

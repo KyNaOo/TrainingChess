@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { initialPosition, playSan } from "../chess/position";
 import type { Line, Side } from "../content/schema";
+import { INITIAL_FEN } from "chessops/fen";
 import {
+  currentFen,
   currentPly,
   initialSessionState,
   isLastLearnLine,
@@ -13,6 +15,7 @@ import {
   type SessionContext,
   type SessionEvent,
   type SessionState,
+  shouldAutoplayOpponent,
   transition,
 } from "./machine";
 import { initialTrainingOrder } from "./queue";
@@ -147,6 +150,32 @@ describe("transition — Apprendre", () => {
     expect(isPlayerTurn(BLACK, state)).toBe(false);
     const after = run(BLACK, [advance, play("c7c6")], state);
     expect(currentPly(after)).toBe(2);
+  });
+});
+
+describe("sélecteurs d'affichage", () => {
+  it("currentFen : position initiale, puis FEN après le dernier coup", () => {
+    const learning = run(WHITE, [{ type: "start-learning" }]);
+    expect(currentFen(WHITE, initialSessionState())).toBe(INITIAL_FEN);
+    expect(currentFen(WHITE, learning)).toBe(INITIAL_FEN);
+    const after = run(WHITE, [play("e2e4")], learning);
+    expect(currentFen(WHITE, after)).toBe(WHITE.lines[0]?.moves[0]?.fen);
+  });
+
+  it("shouldAutoplayOpponent : au bout de la ligne vue, pas après un retour en arrière", () => {
+    const learning = run(WHITE, [{ type: "start-learning" }]);
+    const opponentToMove = run(WHITE, [play("e2e4")], learning);
+    expect(shouldAutoplayOpponent(WHITE, learning)).toBe(false);
+    expect(shouldAutoplayOpponent(WHITE, opponentToMove)).toBe(true);
+
+    const rewound = run(WHITE, [advance, back], opponentToMove);
+    expect(isOpponentTurn(WHITE, rewound)).toBe(true);
+    expect(shouldAutoplayOpponent(WHITE, rewound)).toBe(false);
+
+    const black = run(BLACK, [{ type: "start-learning" }]);
+    expect(shouldAutoplayOpponent(BLACK, black)).toBe(true);
+    expect(shouldAutoplayOpponent(BLACK, run(BLACK, [startTraining(0, 1)], black))).toBe(true);
+    expect(shouldAutoplayOpponent(WHITE, initialSessionState())).toBe(false);
   });
 });
 

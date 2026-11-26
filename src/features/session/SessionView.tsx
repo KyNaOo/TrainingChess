@@ -3,11 +3,13 @@
 import { useEffect, useState } from "react";
 import { useStore } from "zustand";
 import type { Opening } from "@/domain/content/schema";
-import { currentFen, isPlayerTurn, lastMove, type SessionState } from "@/domain/session/machine";
+import { currentFen, isPlayerTurn, lastMove } from "@/domain/session/machine";
 import { Board } from "@/features/board/Board";
 import { strings } from "@/lib/strings";
 import { startOpponentAutoplay, type Timers } from "./autoplay";
+import { StepIndicator } from "./StepIndicator";
 import { createSessionStore } from "./store";
+import { UnderstandStep } from "./UnderstandStep";
 
 const browserTimers: Timers = {
   setTimeout: (callback, delayMs) => window.setTimeout(callback, delayMs),
@@ -19,13 +21,6 @@ function randomSeed(): number {
   return crypto.getRandomValues(new Uint32Array(1))[0] ?? 0;
 }
 
-const STEP_LABELS: Record<SessionState["phase"], string> = {
-  intro: strings.steps.understand,
-  learn: strings.steps.learn,
-  train: strings.steps.train,
-  summary: strings.steps.summary,
-};
-
 export interface SessionViewProps {
   opening: Opening;
 }
@@ -34,8 +29,8 @@ export interface SessionViewProps {
  * Session d'une ouverture. L'état vit dans un store créé au montage, en
  * mémoire seulement : recharger la page recommence la session.
  *
- * Les étapes Comprendre / Apprendre / S'entraîner / Bilan viennent se
- * brancher ici (issues #13 à #16).
+ * Les étapes Apprendre / S'entraîner / Bilan viennent se brancher ici
+ * (issues #14 à #16).
  */
 export function SessionView({ opening }: SessionViewProps) {
   const [store] = useState(() => createSessionStore(opening, { seed: randomSeed() }));
@@ -47,20 +42,22 @@ export function SessionView({ opening }: SessionViewProps) {
   const playerTurn = isPlayerTurn(opening, state);
 
   return (
-    <section className="flex flex-col gap-4" data-phase={state.phase}>
-      <p className="text-sm text-foreground/70">
-        <span className="sr-only">{strings.session.currentStep}</span> {STEP_LABELS[state.phase]}
-      </p>
-      <div className="w-full max-w-[min(100%,32rem)] self-center">
-        <Board
-          fen={currentFen(opening, state)}
-          orientation={opening.side}
-          ariaLabel={strings.board.ariaLabel}
-          playerColor={playerTurn ? opening.side : undefined}
-          onMove={(uci) => dispatch({ type: "play", uci })}
-          lastMove={lastMove(opening, state)?.uci ?? null}
-        />
-      </div>
+    <section className="flex flex-col gap-6" data-phase={state.phase}>
+      <StepIndicator phase={state.phase} />
+      {state.phase === "intro" ? (
+        <UnderstandStep opening={opening} onStart={() => dispatch({ type: "start-learning" })} />
+      ) : (
+        <div className="w-full max-w-[min(100%,32rem)] self-center">
+          <Board
+            fen={currentFen(opening, state)}
+            orientation={opening.side}
+            ariaLabel={strings.board.ariaLabel}
+            playerColor={playerTurn ? opening.side : undefined}
+            onMove={(uci) => dispatch({ type: "play", uci })}
+            lastMove={lastMove(opening, state)?.uci ?? null}
+          />
+        </div>
+      )}
     </section>
   );
 }

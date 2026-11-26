@@ -38,8 +38,18 @@ export const strings = {
   /** Page d'une ouverture (`/openings/[id]`). */
   session: {
     playing: "Vous jouez les",
-    currentStep: "Étape en cours",
     backToOpenings: "Toutes les ouvertures",
+    stepsLabel: "Étapes de la session",
+  },
+
+  /** Étape « Comprendre ». */
+  understand: {
+    keyIdeas: "Idées clés",
+    pawnStructures: "Structures de pions",
+    typicalPlans: "Plans typiques",
+    yourSide: "(votre camp)",
+    keyPosition: "Position caractéristique",
+    start: "Commencer à apprendre les lignes",
   },
 
   notFound: {

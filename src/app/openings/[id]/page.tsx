@@ -22,7 +22,7 @@ export default async function OpeningPage({ params }: PageProps<"/openings/[id]"
   if (opening === undefined) notFound();
 
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 py-8">
+    <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-8">
       <header className="flex flex-col gap-2">
         <Link href="/" className="text-sm text-foreground/70 underline-offset-4 hover:underline">
           {strings.session.backToOpenings}

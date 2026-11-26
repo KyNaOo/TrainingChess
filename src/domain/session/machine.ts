@@ -275,6 +275,18 @@ export function shouldAutoplayOpponent(context: SessionContext, state: SessionSt
   return state.phase !== "learn" || state.ply >= state.maxPly;
 }
 
+/** ← dans Apprendre : possible tant qu'on n'est pas sur la position initiale. */
+export function canGoBack(state: SessionState): boolean {
+  return state.phase === "learn" && state.ply > 0;
+}
+
+/** → dans Apprendre : coup adverse, ou coup du joueur déjà trouvé (après un retour en arrière). */
+export function canGoForward(context: SessionContext, state: SessionState): boolean {
+  if (state.phase !== "learn") return false;
+  const move = nextMove(context, state);
+  return move !== undefined && (move.side !== context.side || state.ply < state.maxPly);
+}
+
 /** Vrai quand l'échiquier attend un coup de l'utilisateur. */
 export function isPlayerTurn(context: SessionContext, state: SessionState): boolean {
   if (state.phase !== "learn" && state.phase !== "train") return false;

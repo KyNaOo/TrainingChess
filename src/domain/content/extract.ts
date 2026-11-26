@@ -1,6 +1,7 @@
 import type { Chess } from "chessops/chess";
 import { type ChildNode, type Node, parsePgn, type PgnNodeData } from "chessops/pgn";
 import { parseAnnotatedComment } from "../chess/comment";
+import { moveLabel } from "../chess/notation";
 import { initialPosition, playSan, positionFromFen, toFen } from "../chess/position";
 import { type Line, type Move, type Opening, openingMetaSchema, openingSchema, type Side } from "./schema";
 
@@ -185,10 +186,4 @@ function checkKeyPosition(root: Node<PgnNodeData>, keyPosition: string, fail: (m
 /** Placement, trait, roques et prise en passant : on ignore les compteurs de coups. */
 function comparableFen(fen: string): string {
   return fen.split(" ").slice(0, 4).join(" ");
-}
-
-/** « 5. Bc4 » pour les Blancs, « 5... Nf6 » pour les Noirs (`ply` commence à 0). */
-function moveLabel(ply: number, san: string): string {
-  const number = Math.floor(ply / 2) + 1;
-  return ply % 2 === 0 ? `${number}. ${san}` : `${number}... ${san}`;
 }

@@ -8,6 +8,7 @@ import { Board } from "@/features/board/Board";
 import { strings } from "@/lib/strings";
 import { startOpponentAutoplay, type Timers } from "./autoplay";
 import { StepIndicator } from "./StepIndicator";
+import { LearnStep } from "./LearnStep";
 import { createSessionStore } from "./store";
 import { UnderstandStep } from "./UnderstandStep";
 
@@ -29,13 +30,13 @@ export interface SessionViewProps {
  * Session d'une ouverture. L'état vit dans un store créé au montage, en
  * mémoire seulement : recharger la page recommence la session.
  *
- * Les étapes Apprendre / S'entraîner / Bilan viennent se brancher ici
- * (issues #14 à #16).
+ * Les étapes S'entraîner et Bilan viennent se brancher ici (issues #15 et #16).
  */
 export function SessionView({ opening }: SessionViewProps) {
   const [store] = useState(() => createSessionStore(opening, { seed: randomSeed() }));
   const state = useStore(store, (s) => s.state);
   const dispatch = useStore(store, (s) => s.dispatch);
+  const startTraining = useStore(store, (s) => s.startTraining);
 
   useEffect(() => startOpponentAutoplay(store, browserTimers), [store]);
 
@@ -46,6 +47,8 @@ export function SessionView({ opening }: SessionViewProps) {
       <StepIndicator phase={state.phase} />
       {state.phase === "intro" ? (
         <UnderstandStep opening={opening} onStart={() => dispatch({ type: "start-learning" })} />
+      ) : state.phase === "learn" ? (
+        <LearnStep opening={opening} state={state} dispatch={dispatch} onStartTraining={startTraining} />
       ) : (
         <div className="w-full max-w-[min(100%,32rem)] self-center">
           <Board

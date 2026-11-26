@@ -3,6 +3,8 @@ import { initialPosition, playSan } from "../chess/position";
 import type { Line, Side } from "../content/schema";
 import { INITIAL_FEN } from "chessops/fen";
 import {
+  canGoBack,
+  canGoForward,
   currentFen,
   currentPly,
   initialSessionState,
@@ -176,6 +178,34 @@ describe("sélecteurs d'affichage", () => {
     expect(shouldAutoplayOpponent(BLACK, black)).toBe(true);
     expect(shouldAutoplayOpponent(BLACK, run(BLACK, [startTraining(0, 1)], black))).toBe(true);
     expect(shouldAutoplayOpponent(WHITE, initialSessionState())).toBe(false);
+  });
+});
+
+describe("navigation ← / → dans Apprendre", () => {
+  it("canGoBack / canGoForward suivent les règles de `back` et `advance`", () => {
+    const learning = run(WHITE, [{ type: "start-learning" }]);
+    expect(canGoBack(learning)).toBe(false);
+    expect(canGoForward(WHITE, learning)).toBe(false);
+
+    const opponentNext = run(WHITE, [play("e2e4")], learning);
+    expect(canGoBack(opponentNext)).toBe(true);
+    expect(canGoForward(WHITE, opponentNext)).toBe(true);
+
+    const playerNext = run(WHITE, [advance], opponentNext);
+    expect(canGoForward(WHITE, playerNext)).toBe(false);
+    expect(canGoForward(WHITE, run(WHITE, [back], playerNext))).toBe(true);
+    expect(canGoForward(WHITE, run(WHITE, [back, back], playerNext))).toBe(true);
+
+    const finished = run(WHITE, solve(WHITE, 0), learning);
+    expect(canGoForward(WHITE, finished)).toBe(false);
+    expect(canGoBack(finished)).toBe(true);
+  });
+
+  it("hors Apprendre, pas de navigation", () => {
+    const training = run(WHITE, [{ type: "start-learning" }, startTraining(0, 1, 2), play("e2e4")]);
+    expect(canGoBack(training)).toBe(false);
+    expect(canGoForward(WHITE, training)).toBe(false);
+    expect(canGoBack(initialSessionState())).toBe(false);
   });
 });
 

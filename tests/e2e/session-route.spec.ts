@@ -1,39 +1,45 @@
-import { expect, type Page, test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
-/** Clique au centre d'une case (échiquier orienté côté Blancs). */
-async function clickSquare(page: Page, square: string) {
-  const board = page.getByRole("application", { name: "Échiquier" });
-  const box = await board.boundingBox();
-  if (box === null) throw new Error("Échiquier introuvable");
-  const file = square.charCodeAt(0) - "a".charCodeAt(0);
-  const rank = Number(square[1]) - 1;
-  const size = box.width / 8;
-  await page.mouse.click(box.x + (file + 0.5) * size, box.y + (7 - rank + 0.5) * size);
-}
+const KEY_POSITION = "Position caractéristique : Ouverture de test (Partie italienne)";
 
-test("la page d'une ouverture affiche son nom et un échiquier orienté selon le camp", async ({ page }) => {
+test.beforeEach(async ({ page }) => {
   await page.goto("/openings/test-opening/");
+});
+
+test("la page d'une ouverture affiche son nom et le camp joué", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Ouverture de test (Partie italienne)");
   await expect(page.getByText("Vous jouez les Blancs")).toBeVisible();
-  await expect(page.getByRole("application", { name: "Échiquier" })).toBeVisible();
-  await expect(page.locator(".cg-wrap")).toHaveClass(/orientation-white/);
   await expect(page).toHaveTitle(/Ouverture de test/);
 });
 
-test("la session repart de zéro au rechargement", async ({ page }) => {
-  await page.goto("/openings/test-opening/");
-  await expect(page.locator("[data-phase]")).toHaveAttribute("data-phase", "intro");
-  await page.reload();
-  await expect(page.locator("[data-phase]")).toHaveAttribute("data-phase", "intro");
+test("Comprendre : présentation, position caractéristique et indicateur d'étape", async ({ page }) => {
+  const steps = page.getByRole("navigation", { name: "Étapes de la session" });
+  await expect(steps.getByRole("listitem")).toHaveText(["1Comprendre", "2Apprendre", "3S'entraîner"]);
+  await expect(steps.locator('[aria-current="step"]')).toHaveText("1Comprendre");
+
+  await expect(page.getByText(/Ouverture minimale qui sert à faire tourner/)).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Idées clés" })).toBeVisible();
+  await expect(page.getByText("Le fou c4 vise f7", { exact: false })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Structures de pions" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Plans typiques" })).toBeVisible();
+  await expect(page.getByText("Blancs (votre camp)")).toBeVisible();
+
+  const keyPosition = page.getByRole("img", { name: KEY_POSITION });
+  await expect(keyPosition).toBeVisible();
+  await expect(keyPosition.locator("piece.bishop.white")).toHaveCount(2);
+  await expect(page.locator(".cg-wrap")).toHaveClass(/orientation-white/);
 });
 
-test("aucun coup n'est jouable tant que la session n'a pas commencé", async ({ page }) => {
-  await page.goto("/openings/test-opening/");
-  await expect(page.locator("cg-board").first()).toBeVisible();
-  await clickSquare(page, "e2");
-  await clickSquare(page, "e4");
-  await expect(page.locator("cg-board piece.pawn.white").filter({ hasNot: page.locator(".ghost") })).toHaveCount(8);
-  await expect(page.locator("[data-phase]")).toHaveAttribute("data-phase", "intro");
+test("le bouton mène à l'étape Apprendre, et un rechargement recommence la session", async ({ page }) => {
+  await page.getByRole("button", { name: "Commencer à apprendre les lignes" }).click();
+  const steps = page.getByRole("navigation", { name: "Étapes de la session" });
+  await expect(steps.locator('[aria-current="step"]')).toHaveText("2Apprendre");
+  await expect(page.getByRole("application", { name: "Échiquier" })).toBeVisible();
+  await expect(page.getByRole("img", { name: KEY_POSITION })).toHaveCount(0);
+
+  await page.reload();
+  await expect(steps.locator('[aria-current="step"]')).toHaveText("1Comprendre");
+  await expect(page.getByRole("img", { name: KEY_POSITION })).toBeVisible();
 });
 
 test("un id inconnu affiche une 404 propre avec un lien vers les ouvertures", async ({ page }) => {

@@ -15,6 +15,7 @@ import {
   type SessionState,
   transition,
 } from "./machine";
+import { initialTrainingOrder } from "./queue";
 
 function line(name: string, sans: string[]): Line {
   let position = initialPosition();
@@ -231,6 +232,22 @@ describe("transition — S'entraîner", () => {
     expect(isOpponentTurn(BLACK, state)).toBe(true);
     const after = expectPhase(run(BLACK, [advance, play("d7d5")], state), "train");
     expect(after.current).toMatchObject({ ply: 2, movesFoundFirstTry: 1 });
+  });
+});
+
+describe("transition — file mélangée", () => {
+  it("accepte l'ordre produit par `initialTrainingOrder` et le suit, ligne ratée en dernier", () => {
+    const order = initialTrainingOrder(WHITE.lines.length, 99);
+    const [first, ...rest] = order;
+    if (first === undefined) throw new Error("file vide");
+
+    let state = run(WHITE, [{ type: "start-learning" }, { type: "start-training", order }]);
+    expect(expectPhase(state, "train").current.lineIndex).toBe(first);
+
+    const [firstMove, ...others] = solve(WHITE, first);
+    if (firstMove === undefined) throw new Error("ligne vide");
+    state = run(WHITE, [play("a2a3"), play("a2a4"), firstMove, ...others], state);
+    expect(expectPhase(state, "train").queue).toEqual([...rest, first]);
   });
 });
 

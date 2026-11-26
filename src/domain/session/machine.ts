@@ -1,4 +1,5 @@
 import type { Line, Move, Opening } from "../content/schema";
+import { dequeue, requeue } from "./queue";
 
 /**
  * Machine à états de la session : `intro → learn → train → summary`.
@@ -8,7 +9,7 @@ import type { Line, Move, Opening } from "../content/schema";
  *   l'adversaire (`isOpponentTurn`), l'interface envoie `advance` après le
  *   délai de son choix.
  * - L'ordre de la file d'entraînement est fourni par l'événement
- *   `start-training` (mélange à graine calculé ailleurs).
+ *   `start-training` (voir `initialTrainingOrder` dans `./queue`).
  *
  * Un événement qui n'a pas de sens dans l'état courant est ignoré : le
  * réducteur renvoie alors exactement le même objet d'état.
@@ -151,9 +152,9 @@ function learnTransition(context: SessionContext, state: LearnState, event: Sess
 
 function startTraining(context: SessionContext, order: readonly number[]): TrainState {
   assertPermutation(order, context.lines.length);
-  const [first, ...queue] = order;
+  const first = dequeue(order);
   if (first === undefined) throw new Error("La file d'entraînement est vide.");
-  return { phase: "train", queue, current: startRun(first), attempts: [] };
+  return { phase: "train", queue: first.rest, current: startRun(first.lineIndex), attempts: [] };
 }
 
 function startRun(lineIndex: number): TrainRun {
@@ -199,9 +200,9 @@ function trainTransition(context: SessionContext, state: TrainState, event: Sess
     }
     case "next-line": {
       if (next !== undefined) return state;
-      const [head, ...queue] = state.queue;
+      const head = dequeue(state.queue);
       if (head === undefined) return { phase: "summary", attempts: state.attempts };
-      return { ...state, queue, current: startRun(head) };
+      return { ...state, queue: head.rest, current: startRun(head.lineIndex) };
     }
     default:
       return state;
@@ -220,7 +221,7 @@ function completeIfDone(line: Line, state: TrainState): TrainState {
   };
   return {
     ...state,
-    queue: current.failed ? [...state.queue, current.lineIndex] : state.queue,
+    queue: current.failed ? requeue(state.queue, current.lineIndex) : state.queue,
     attempts: [...state.attempts, attempt],
   };
 }
